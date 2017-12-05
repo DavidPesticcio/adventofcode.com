@@ -30,3 +30,5 @@ Answer:
  [Submit]
 
 You can also [Share] this puzzle.
+
+That's the right answer! You are one gold star closer to debugging the printer. [Return to Day 1]
