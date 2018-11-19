@@ -28,7 +28,7 @@ sum_of_duplicates=0
 
 elements=$(seq 0 $((${#input_array[@]}-1)))
 element_first=${input_array[0]}
-element_max=$((${#input_array[@]}-1))
+element_max=$((${#input_array[@]}))
 
 # To show progress etc - set to any value except NULL/EMPTY to enable.
 status=
@@ -48,7 +48,6 @@ print_input_details() {
   echo "########################################"
   echo
   echo "Elements to itterate over: 0..$((${#input_array[@]}-1))"
-  echo "Elements to itterate over: 0..${element_max}"
   echo "Element max: ${element_max}"
   echo
 }
@@ -77,11 +76,11 @@ day01p2() {
   do
     element_this=${input_array[${element}]}
 
-    if [ $element -le $((${element_max} / 2)) ]
+    if [ $element -lt $((${element_max} / 2)) ]
     then
-      element_next=${input_array[$((${element} + (${element_max} / 2) + 1))]}
+      element_next=${input_array[$((${element} + (${element_max} / 2) ))]}
     else
-      element_next=${input_array[$((${element} - (${element_max} / 2) - 1))]}
+      element_next=${input_array[$((${element} - (${element_max} / 2) ))]}
     fi
 
     [ $status ] && print_current_status
