@@ -1,13 +1,7 @@
 #!/bin/bash
 
-
-declare -i MAX_INT=$(perl -MPOSIX -le 'print LONG_MAX')
-
 row=1
 modulo=0
-
-lowest=$MAX_INT
-highest=0
 
 modulo?() {
   item_this=$1
@@ -65,7 +59,6 @@ do
   echo
 
   row=$(($row + 1))
-  total=$(($total + ($highest - $lowest)))
 
 done <<EOF
 798 1976 1866 1862 559 1797 1129 747 85 1108 104 2000 248 131 87 95
@@ -86,4 +79,4 @@ done <<EOF
 2155 225 2856 3061 105 204 1269 171 2505 2852 977 1377 181 1856 2952 2262
 EOF
 
-echo "Checksum: $modulo"
+echo "Summation of modulo pairs: $modulo"
