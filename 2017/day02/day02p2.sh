@@ -4,33 +4,64 @@
 declare -i MAX_INT=$(perl -MPOSIX -le 'print LONG_MAX')
 
 row=1
-total=0
+modulo=0
 
+lowest=$MAX_INT
+highest=0
+
+modulo?() {
+  item_this=$1
+  item_next=$2
+
+  if [ $(($item_this % $item_next)) -eq 0 ]
+  then
+    echo 0
+  else
+    echo 1
+  fi
+}
 
 while read line
 do
-  lowest=$MAX_INT
-  highest=0
+  read -r -a items <<< "$line"
+
+  elements_this=$(seq 0 $((${#items[@]}-1)))
 
   echo "Processing row: $row"
-  echo "Row cells     : $line"
+  echo "Row cells     : ${items[@]}"
+  echo "Row items     : ${#items[@]}"
 
-  for cell in $line
+  for element_this in $elements_this
   do
-    if [ $cell -lt $lowest ]
-    then
-      lowest=$cell
-    fi
+    item_this=${items[${element_this}]}
 
-    if [ $cell -gt $highest ]
-    then
-      highest=$cell
-    fi
+    elements_next=$(seq $(($element_this + 1)) $((${#items[@]}-1)))
+
+    for element_next in $elements_next
+    do
+      item_next=${items[${element_next}]}
+
+      if [ $item_this -lt $item_next ]
+      then
+        if [ $(modulo? $item_next $item_this) -eq 0 ]
+	then
+	  modulo="$(($modulo + $(($item_next / $item_this))))"
+          echo " --> Modulo! - $item_next / $item_this = $(($item_next / $item_this))"
+	fi
+      fi
+
+      if [ $item_this -gt $item_next ]
+      then
+        if [ $(modulo? $item_this $item_next) -eq 0 ]
+	then
+	  modulo="$(($modulo + $(($item_this / $item_next))))"
+          echo " --> Modulo! - $item_this / $item_next = $(($item_this / $item_next))"
+	fi
+      fi
+
+    done
   done
 
-  echo "Highest       : $highest"
-  echo "Lowest        : $lowest"
-  echo "Difference    : $(($highest - $lowest))"
   echo
 
   row=$(($row + 1))
@@ -55,4 +86,4 @@ done <<EOF
 2155 225 2856 3061 105 204 1269 171 2505 2852 977 1377 181 1856 2952 2262
 EOF
 
-echo "Checksum: $total"
+echo "Checksum: $modulo"
